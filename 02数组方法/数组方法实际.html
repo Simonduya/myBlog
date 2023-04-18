@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        const data = [
+            { name: 'Alice', age: 25, score: [80, 90, 95] },
+            { name: 'Bob', age: 30, score: [70, 85, 92] },
+            { name: 'Charlie', age: 35, score: [75, 88, 96] }
+        ];
+        /* 计算平均分 */
+        let res1 = data.map(item => {
+            const average = item.score.reduce((pre, cur) => pre + cur, 0) / item.score.length;
+            return { name: item.name, grade: average };
+        })
+        console.log(res1);
+    </script>
+</body>
+
+</html>
