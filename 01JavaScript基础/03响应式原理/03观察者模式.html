@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset=utf-8>
+</head>
+
+<body>
+
+    <script type="text/javascript">
+        /*
+        请补全JavaScript代码，完成"Observer"、"Observerd"类实现观察者模式。要求如下：
+        1. 被观察者构造函数需要包含"name"属性和"state"属性且"state"初始值为"走路"
+        2. 被观察者创建"setObserver"函数用于保存观察者们
+        3. 被观察者创建"setState"函数用于设置该观察者"state"并且通知所有观察者
+        4. 观察者创建"update"函数用于被观察者进行消息通知，该函数需要打印（console.log）数据，数据格式为：小明正在走路。其中"小明"为被观察者的"name"属性，"走路"为被观察者的"state"属性
+        注意：
+        1. "Observer"为观察者，"Observerd"为被观察者
+        */
+        // 补全代码
+        // 被观察者
+        class Observerd {
+            constructor(name) {
+                this.name = name;  // name没有初始值，采用传入值
+                this.state = '走路';
+                this.observers = []; // 用于存放观察者
+
+            }
+            // 用于保存观察者们：说明实例调用时传入的观察者
+            setObserver(observer) {
+                this.observers.push(observer); // 将观察者存起来，好将消息通知到他们
+            }
+            // 用于设置该观察者"state"并且通知所有观察者
+            setState(state) {
+                this.state = state; //将该观察者的状态，进行保留，并同步给其他观察者
+                this.observers.forEach(observer => observer.update(this)); // this指的事被观察者
+            }
+        }
+
+        // 观察者
+        class Observer {
+            // 用于被观察者进行消息通知
+            update(observerd) {
+                const { name, state } = observerd;
+                console.log(name + '正在' + state);
+            }
+        }
+/*
+        // 使用场景一：一个观察者，对应多个被观察者；
+        // 举例：小组成员（被观察者），向组长（观察者）汇报工作状态，组长那会显示每个人不同的状态
+        // 创建观察者
+        const observer01 = new Observer();
+
+        // 创建被观察者001
+        const observerd001 = new Observerd();
+        // 建立被观察者的观察者联系： 通知到观察者，被观察者在干嘛
+        observerd001.setObserver(observer01);
+        // 被观察者姓名
+        observerd001.name = '被观察者001';
+        // 被观察者状态
+        observerd001.setState('打王者荣耀');
+
+        // 创建被观察者002
+        const observerd002 = new Observerd();
+        // 建立被观察者的观察者联系： 通知到观察者，被观察者在干嘛
+        observerd002.setObserver(observer01);
+        // 被观察者姓名
+        observerd002.name = '被观察002';
+        // 被观察者状态
+        observerd002.setState('吃小龙虾');
+        */
+        
+        // 使用场景二：一个被观察，对应多个观察者
+        // 举例：小组成员（被观察者001）除了向小组长（观察者01）汇报，还要向大组长（观察者02）汇报，会将同一份报告，同步到两个组长那里
+        // 创建观察者
+        const observer01 = new Observer();
+        const observer02 = new Observer();
+
+        // 创建被观察者001
+        const observerd001 = new Observerd();
+        // 被观察者001建立与观察者01，02之间的关系
+        observerd001.setObserver(observer01);
+        observerd001.setObserver(observer02);
+
+        // 被观察者姓名
+        observerd001.name = '被观察者001';
+        // 被观察者状态
+        observerd001.setState('努力工作');
+
+    </script>
+</body>
+
+</html>

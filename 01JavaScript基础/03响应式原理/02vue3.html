@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        let activeFn = null;
+        class Depend {
+            constructor() {
+                this.activeFns = new Set();
+            }
+            depend() {
+                if (activeFn) {
+                    this.activeFns.add(activeFn);
+                }
+            }
+            notify() {
+                this.activeFns.forEach(fn => {
+                    fn();
+                })
+            }
+        }
+
+        function watchFn(fn) {
+            activeFn = fn;
+            fn();
+            activeFn = null;
+        }
+
+        let weakMap = new WeakMap();
+        function getDepend(obj, key) {
+            let map = weakMap.get(obj);
+            if (!map) {
+                map = new Map();
+                weakMap.set(obj, map);
+            }
+            let depend = map.get(key);
+            if (!depend) {
+                depend = new Depend();
+                map.set(key, depend);
+            }
+            return depend;
+        }
+
+        function reactive(obj) {
+            return new Proxy(obj, {
+                get(obj, key, receiver) {
+                    let depend = getDepend(obj, key);
+                    depend.depend();
+                    return Reflect.get(obj, key, receiver);
+                },
+                set(obj, key, newVal, receiver) {
+                    Reflect.set(obj, key, newVal, receiver);
+                    let depend = getDepend(obj, key);
+                    depend.notify();
+                }
+            })  
+        }
+
+        const obj = reactive({
+            name:'obj',
+            age:18
+        })
+        watchFn(() => {
+            console.log(obj.name);
+        })
+        watchFn(() => {
+            console.log(obj.age);
+        })
+        obj.name = 'ooo'
+    </script>
+</body>
+
+</html>
