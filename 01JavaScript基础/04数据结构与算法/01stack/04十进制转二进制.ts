@@ -1,4 +1,4 @@
-import ArrayStack from "./stack(Array)";
+import ArrayStack from "./01stack(Array)";
 
 function decToBinary(n: number): void {
     const stack = new ArrayStack<number>()

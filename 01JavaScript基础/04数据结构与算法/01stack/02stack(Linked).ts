@@ -1,4 +1,4 @@
-import IStack from "./IStack";
+import IStack from "./03IStack";
 
 class LinkedStack<T> implements IStack<T> {
     push(el: T): void {
