@@ -1,4 +1,4 @@
-import { swap } from "./utils";
+import { swap, testSort } from "./utils";
 
 function bubbleSort(arr: number[]): number[] {
   let len = arr.length;
@@ -13,5 +13,4 @@ function bubbleSort(arr: number[]): number[] {
   return arr;
 }
 
-const arr = [1, 4, 3, 7, 100, 0, 11];
-console.log(bubbleSort(arr));
+testSort(bubbleSort);
