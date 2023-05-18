@@ -7,5 +7,8 @@
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
     }
+  },
+  "dependencies": {
+    "hy-algokit": "^1.4.0"
   }
 }
