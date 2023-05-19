@@ -84,6 +84,37 @@ class BSTree<T> {
       }
     }
   }
+  getMaxValue(): T | null {
+    let current = this.root;
+    while (current && current.right) {
+      current = current.right;
+    }
+    return current?.value ?? null;
+  }
+  getMinValue(): T | null {
+    let current = this.root;
+    while (current && current.left) {
+      current = current.left;
+    }
+    return current?.value ?? null;
+  }
+  searchValue(value: T): boolean {
+    let current = this.root;
+    if (!current) {
+      return false;
+    }
+    while (current) {
+      if (current.value === value) {
+        return true;
+      }
+      if (current.value > value) {
+        current = current.left;
+      } else {
+        current = current.right;
+      }
+    }
+    return false;
+  }
 }
 const bst = new BSTree<number>();
 bst.insert(11);
@@ -111,4 +142,10 @@ console.log("后序遍历");
 bst.postTraverse();
 console.log("层序遍历");
 bst.levelTraverse();
+console.log("max and min");
+console.log(bst.getMaxValue());
+console.log(bst.getMinValue());
+console.log('searchValue');
+console.log(bst.searchValue(300));
+
 export {};
