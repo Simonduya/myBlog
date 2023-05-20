@@ -3,6 +3,13 @@ import { btPrint } from "hy-algokit";
 class TreeNode<T> extends TNode<T> {
   left: TreeNode<T> | null = null;
   right: TreeNode<T> | null = null;
+  parent: TreeNode<T> | null = null;
+  get isLeft(): boolean {
+    return !!(this.parent && this.parent.left === this);
+  }
+  get isRight(): boolean {
+    return !!(this.parent && this.parent.right === this);
+  }
 }
 
 class BSTree<T> {
@@ -98,6 +105,30 @@ class BSTree<T> {
     }
     return current?.value ?? null;
   }
+  search(value: T): boolean {
+    return this.searchValue(value);
+  }
+  private searchNode(value: T): TreeNode<T> | null {
+    let current = this.root;
+    let parent: TreeNode<T> | null = null;
+    if (!current) return null;
+    while (current) {
+      if (current.value === value) {
+        return current;
+      }
+      parent = current;
+      if (current.value > value) {
+        current = current.left;
+      } else {
+        current = current.right;
+      }
+      if (current) {
+        current.parent = parent;
+      }
+    }
+
+    return null;
+  }
   searchValue(value: T): boolean {
     let current = this.root;
     if (!current) {
@@ -114,6 +145,30 @@ class BSTree<T> {
       }
     }
     return false;
+  }
+  remove(value: T): boolean {
+    let current = this.searchNode(value);
+    if (!current) {
+      return false;
+    }
+    if (!current.left && !current.right) {
+      if (current === this.root) {
+        this.root = null;
+      } else if (current.isLeft) {
+        current.parent!.left = null;
+      } else if (current.isRight) {
+        current.parent!.right = null;
+      }
+    } else if (!current.right) {
+      if (current === this.root) {
+        this.root = current.left;
+      } else if (current.isLeft) {
+        current.parent!.left = current.left;
+      } else {
+        current.parent!.right = current.left;
+      }
+    }
+    return true;
   }
 }
 const bst = new BSTree<number>();
@@ -145,7 +200,9 @@ bst.levelTraverse();
 console.log("max and min");
 console.log(bst.getMaxValue());
 console.log(bst.getMinValue());
-console.log('searchValue');
+console.log("searchValue");
 console.log(bst.searchValue(300));
-
+console.log("remove");
+console.log(bst.remove(3));
+bst.print();
 export {};
